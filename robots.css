@@ -30,3 +30,6 @@
 .prl.run{background:rgba(255,209,102,.25);border-left-color:#ffd166}
 .prl b{color:#ffd166}
 .prl button{background:none;border:0;color:#ff7d9d;font-weight:700;padding:2px 6px}
+[hidden]{display:none!important}
+.fcp{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:10px;max-height:480px;overflow:auto;margin-bottom:12px}
+.fe{fill:none;stroke:var(--mut);stroke-width:2}
