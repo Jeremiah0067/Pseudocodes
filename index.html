@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Learn pseudocode and flowcharts with interactive lessons, a step-by-step program visualizer and a quiz.">
+<meta name="theme-color" content="#6a4cff">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<title>Flow &amp; Code Lab</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css"></head><body><div class="wrap">
+<header>
+<div><h1>Flow <em>&amp;</em> Code Lab</h1><p>Learn pseudocode and flowcharts, then watch them run.</p></div>
+<div class="xp"><span id="lv">Level 1</span><div class="bar"><i id="xb"></i></div><span id="xt">0 XP</span></div>
+</header>
+<nav class="tabs"><button class="tab on" data-t="0">1. Learn the basics</button><button class="tab" data-t="1">2. Watch it run</button><button class="tab" data-t="2">3. Test yourself</button></nav>
+
+<section class="pane on" id="p0">
+<div class="card"><h2>One idea, three ways to write it</h2>
+<p class="mut" style="margin:0">An <b>algorithm</b> is a list of steps that solves a problem, like a recipe. Computer scientists write it in two ways before they write real code.</p>
+<div class="three">
+<div class="chip"><b>Algorithm</b>The steps themselves, in order.</div>
+<div class="chip"><b>Pseudocode</b>The steps as short lines of plain, code-like English. Not a real language, so no strict rules.</div>
+<div class="chip"><b>Flowchart</b>The same steps as a map of shapes and arrows. You can see the choices.</div>
+</div></div>
+
+<div class="card"><h2>Warm-up: put the algorithm in order</h2>
+<p class="mut" style="margin:0">You are making a cup of tea. Tap the steps in the right order.</p>
+<div class="pool" id="pool"></div><div class="ans" id="ans"></div>
+<div class="ctl"><button class="btn g" id="rs">Start again</button><span id="tm" class="mut"></span></div></div>
+
+<div class="card"><h2>The four flowchart shapes</h2><p class="mut" style="margin:0 0 12px">Every shape has one job. Arrows show which step comes next.</p>
+<div class="sym" id="sym"></div></div>
+
+<div class="card"><h2>Pseudocode words you need</h2><p class="mut" style="margin:0 0 12px">Write one instruction per line. Indent the lines inside an IF or a WHILE. Always close them with ENDIF or ENDWHILE.</p>
+<div class="kw">
+<div><b>INPUT n</b><span>Ask for a value and store it in n.</span></div>
+<div><b>OUTPUT n</b><span>Show something on the screen.</span></div>
+<div><b>SET total TO 0</b><span>Put a value in a variable. In a flowchart: total ← 0</span></div>
+<div><b>IF … THEN … ELSE … ENDIF</b><span>Pick one of two paths. This is a decision diamond.</span></div>
+<div><b>WHILE … DO … ENDWHILE</b><span>Keep repeating while the answer is YES. A diamond with an arrow looping back.</span></div>
+<div><b>n MOD 2</b><span>The remainder after dividing. 7 MOD 2 = 1, so 7 is odd.</span></div>
+</div></div>
+</section>
+
+<section class="pane" id="p1">
+<div class="card" style="padding:16px"><h2>Pick a program, then press Step</h2>
+<p class="mut" style="margin:0 0 10px">The yellow ball follows the arrows. Watch the matching pseudocode line light up, and watch the variables change.</p>
+<div class="pills" id="pills"></div>
+<div class="ctl"><label for="inp"><b id="inl">Input n:</b></label><input type="number" id="inp"><button class="btn" id="stp">Step</button><button class="btn g" id="aut">Auto-play</button><button class="btn g" id="rst">Restart</button></div>
+<div class="viz"><div><div class="code" id="code"></div><div class="mut" style="margin:0 0 4px">Variables</div><div class="vars" id="vars"></div><div class="mut" style="margin:0 0 4px">Screen</div><div class="out" id="out"></div></div>
+<div><div class="fc"><svg id="svg"></svg></div></div></div>
+<div class="msg" id="msg"></div></div>
+</section>
+
+<section class="pane" id="p2"><div class="card q" id="quiz"></div></section>
+
+<script src="app.js" defer></script></div></body></html>
