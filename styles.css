@@ -93,3 +93,14 @@ input[type=number]{font:inherit;width:84px;border:2px solid var(--line);backgrou
 .cf{position:fixed;top:-20px;width:10px;height:14px;z-index:9;animation:fall 2.4s linear forwards;pointer-events:none}
 @keyframes fall{to{transform:translateY(105vh) rotate(720deg)}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.sheet{display:none}
+@media print{
+body{background:#fff;color:#000}
+.wrap,.toast,.cf{display:none!important}
+.sheet{display:block;font:16px/1.6 Fredoka,system-ui,sans-serif;color:#000;padding:8px}
+.sheet h1{font-size:26px;margin:0 0 6px}.sheet h2{font-size:18px;margin:18px 0 6px;border-bottom:2px solid #6a4cff}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:4px 24px}
+.sk{list-style:none;padding:0;margin:0}.sk li{margin:4px 0}
+.nl{border-bottom:1px solid #999;height:30px}
+}
