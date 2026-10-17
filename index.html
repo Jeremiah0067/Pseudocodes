@@ -7,13 +7,14 @@
 <title>Flow &amp; Code Lab</title>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
-<link rel="stylesheet" href="robot.css"></head><body><div class="wrap">
+<link rel="stylesheet" href="robot.css">
+<link rel="stylesheet" href="builder.css"></head><body><div class="wrap">
 <header>
 <div><h1>Flow <em>&amp;</em> Code Lab</h1><p>Learn pseudocode and flowcharts, then watch them run.</p></div>
 <div class="xp"><span id="lv">Level 1</span><div class="bar"><i id="xb"></i></div><span id="xt">0 XP</span></div>
 <button class="btn g" id="psb">Progress sheet</button>
 </header>
-<nav class="tabs"><button class="tab on" data-t="0">1. Learn the basics</button><button class="tab" data-t="1">2. Watch it run</button><button class="tab" data-t="2">3. Test yourself</button><button class="tab" data-t="3">4. Robot missions</button></nav>
+<nav class="tabs"><button class="tab on" data-t="0">1. Learn the basics</button><button class="tab" data-t="1">2. Watch it run</button><button class="tab" data-t="2">3. Test yourself</button><button class="tab" data-t="3">4. Robot missions</button><button class="tab" data-t="4">5. Build a flowchart</button></nav>
 
 <section class="pane on" id="p0">
 <div class="card"><h2>One idea, three ways to write it</h2>
@@ -63,6 +64,21 @@
 <div><div class="mut">Blocks</div><div class="pal" id="pal"></div><div class="mut" style="margin-bottom:4px">Your program</div><div class="plist" id="plist"></div>
 <div class="ctl"><button class="btn" id="rrun">Run</button><button class="btn g" id="rclr">Clear</button><button class="btn g" id="rhint">Hint</button><button class="btn g" id="rfb">Show flowchart</button></div><div class="fcp" id="rfc" hidden></div></div></div></div></section>
 
+<section class="pane" id="p4"><div class="card"><h2>Build a flowchart</h2>
+<p class="mut" style="margin:0">Read the pseudocode, then build the matching flowchart. Run it to watch it work, and press Check to test it. Your work is saved on this device.</p>
+<div class="lvls" id="fbl"></div>
+<div class="msg" id="fbg" style="margin:0 0 14px"></div>
+<div class="fbx"><div>
+<div class="pal" id="fbp"><button class="blk s" data-a="start">⬭ Start</button><button class="blk i" data-a="io">▱ Input / Output</button><button class="blk p" data-a="proc">▭ Process</button><button class="blk d" data-a="dec">◇ Decision</button><button class="blk s" data-a="end">⬭ End</button></div>
+<div class="fcv"><svg id="fbs" viewBox="0 0 640 600" role="img" aria-label="Flowchart canvas"></svg></div>
+<div class="ctl" style="margin-top:12px"><button class="btn g" id="fbar">Arrow tool: off</button><button class="btn g" id="fbdel">Delete selected</button><button class="btn g" id="fbclr">Start over</button></div>
+<div class="msg" id="fbe"></div></div>
+<div><div class="code" id="fbc"></div>
+<div class="ctl"><label for="fbi"><b>Input values</b></label><input class="txt" type="text" id="fbi" style="width:150px;margin:0" placeholder="e.g. 4"></div>
+<div class="ctl"><button class="btn" id="fbrun">Run</button><button class="btn" id="fbchk" style="background:var(--ok)">Check</button><button class="btn g" id="fbhint">Hint</button><button class="btn g" id="fbsol">Show me one way</button></div>
+<div class="mut" style="margin-bottom:4px">Variables</div><div class="vars" id="fbv"></div><div class="mut" style="margin-bottom:4px">Screen</div><div class="out" id="fbo"></div><div class="msg" id="fbm"></div></div></div></div></section>
+
 <script src="app.js" defer></script>
 <script src="robot.js" defer></script>
+<script src="builder.js" defer></script>
 <script src="progress.js" defer></script></div><div class="sheet" id="sheet"></div></body></html>
