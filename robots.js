@@ -8,7 +8,10 @@ const LV=[
 {n:"Until done",g:"You don’t know how far away the gem is. Keep walking WHILE you are not at the gem.",h:"Use WHILE not at gem DO, with a FORWARD inside it.",m:["##########","S........T","##########"],p:3,b:"FLRPW"},
 {n:"Decisions",g:"Walk the winding path. Turn only when there is a wall ahead.",h:"Inside the WHILE, use IF wall ahead THEN TURN RIGHT, and put FORWARD in the ELSE part.",m:["S...#","###.#","T...#","#####"],p:7,b:"FLRPWI"},
 {n:"Other way",g:"Same idea, but this path bends the other way.",h:"Swap TURN RIGHT for TURN LEFT in your decision.",m:["#####","T...#","###.#","S...#"],p:7,b:"FLRPWI"},
-{n:"The spiral",g:"Final mission! One short program can solve a long maze.",h:"The program from mission 6 works here too. Keep turning right at walls.",m:["S....","####.","..T#.",".###.","....."],p:7,b:"FLRPWI"}];
+{n:"The spiral",g:"Final mission! One short program can solve a long maze.",h:"The program from mission 6 works here too. Keep turning right at walls.",m:["S....","####.","..T#.",".###.","....."],p:7,b:"FLRPWI"},
+{n:"Nested loops",g:"A loop can sit inside another loop. Walk the lap to the gem.",h:"Try REPEAT 3 with another REPEAT 3 inside it: walk 3 steps, then turn right.",m:["S...","###.","###.","T..."],p:6,b:"FLRP"},
+{n:"Spiral, other way",g:"Spiral the other way around. Which way should the robot turn?",h:"Use the same program as the last spiral, but turn left at walls.",m:[".....",".###.","..T#.","####.","S...."],p:7,b:"FLRPWI"},
+{n:"Boss maze",g:"The big one. A long spiral, and your program can still be short.",h:"WHILE not at gem, IF wall ahead THEN TURN RIGHT, ELSE FORWARD.",m:["S......","######.",".....#.",".###.#.",".#T..#.",".#####.","......."],p:7,b:"FLRPWI"}];
 const PAL=[["F","FORWARD","m"],["L","TURN LEFT","m"],["R","TURN RIGHT","m"],["P","REPEAT","l"],["W","WHILE not at gem","l"],["I","IF wall ahead","q"]];
 const TX={F:"FORWARD",L:"TURN LEFT",R:"TURN RIGHT",EP:"ENDREPEAT",W:"WHILE not at gem DO",EW:"ENDWHILE",I:"IF wall ahead THEN",E:"ELSE",EI:"ENDIF"};
 const DX=[1,0,-1,0],DY=[0,1,0,-1];
@@ -41,7 +44,7 @@ const gap=i=>`<div class="pg${ins==i?" on":""}" data-g="${i}">${ins==i?"new bloc
 lines.forEach((x,i)=>{h+=gap(i);if(["EP","EW","EI","E"].includes(x.t))d--;
 h+=`<div class="prl" data-i="${i}"><span>${"    ".repeat(Math.max(d,0))}${txt(x).replace(/\b(REPEAT|TIMES|WHILE|DO|ENDWHILE|ENDREPEAT|IF|THEN|ELSE|ENDIF|FORWARD|TURN)\b/g,"<b>$1</b>")}</span><button data-d="${i}" aria-label="Delete block">✕</button></div>`;
 if(["P","W","I","E"].includes(x.t))d++});
-q("#plist").innerHTML=h+gap(n)}
+q("#plist").innerHTML=h+gap(n);fc()}
 const O=["P","W","I"],E=["EP","EW","EI"];
 function range(i){const t=lines[i].t;let d=0,j;
 if(O.includes(t)){for(j=i;j<lines.length;j++){if(O.includes(lines[j].t))d++;else if(E.includes(lines[j].t))d--;if(!d)return[i,j]}}
@@ -75,6 +78,39 @@ else if(n.t=="P")for(let k=0;k<n.n;k++)ex(n.b);
 else if(n.t=="W")while(!at()&&!stop()){cnt++;ex(n.b)}
 else ex(ahead()?n.b:n.e)}}
 ex(parse());return{tr,crash,loop:cnt>300,win:!crash&&cnt<=300&&at()}}
+
+/* flowchart view of the learner's program */
+const FW=150;
+const pa=(d,m)=>`<path class="fe"${m?' marker-end="url(#fa)"':""} d="${d}"/>`;
+const TT=(x,y,t,a)=>`<text class="lb" x="${x}" y="${y}" text-anchor="${a||"start"}">${t}</text>`;
+const bx=(cx,y,t,c,w,h)=>{w=w||FW;h=h||34;return`<rect class="nd n-${c}" x="${cx-w/2}" y="${y}" width="${w}" height="${h}" rx="${c=="start"?h/2:8}"/><text class="nt" x="${cx}" y="${y+h/2+4.5}">${t}</text>`};
+const dia=(cx,y,t)=>`<polygon class="nd n-dec" points="${cx},${y} ${cx+75},${y+28} ${cx},${y+56} ${cx-75},${y+28}"/><text class="nt d" x="${cx}" y="${y+32.5}">${t}</text>`;
+function lseq(items){const A=items.map(litem),w=A.reduce((a,b)=>Math.max(a,b.w),0),h=A.reduce((a,b,i)=>a+b.h+(i?26:0),0);
+return{w,h,n:A.length,d(cx,y){let s="",cy=y;A.forEach((b,i)=>{if(i)s+=pa(`M${cx},${cy-26} V${cy}`,1);s+=b.d(cx,cy);cy+=b.h+26});return s}}}
+function litem(n){
+if("FLR".includes(n.t))return{w:FW,h:34,d:(cx,y)=>bx(cx,y,{F:"Move forward",L:"Turn left",R:"Turn right"}[n.t],"proc")};
+const B=lseq(n.b);
+if(n.t=="I"){const X=lseq(n.e),wl=Math.max(B.w,90),wr=Math.max(X.w,90),W=wl+wr+30,bh=Math.max(B.h,X.h),bt=76,mg=bt+bh+(bh?24:12),h=mg+22;
+return{w:Math.max(W,FW),h,d(cx,y){const lx=cx-W/2+wl/2,rx=cx+W/2-wr/2,ey=y+28;let s=dia(cx,y,"Wall ahead?");
+[[B,lx,cx-75,"YES",-1],[X,rx,cx+75,"NO",1]].forEach(([S,x2,sx,lab,sg])=>{
+if(S.n)s+=pa(`M${sx},${ey} H${x2} V${y+bt}`,1)+S.d(x2,y+bt)+pa(`M${x2},${y+bt+S.h} V${y+mg} H${cx}`);
+else s+=pa(`M${sx},${ey} H${x2} V${y+mg} H${cx}`);
+s+=TT(sx+sg*6,ey-6,lab,sg<0?"end":"start")});
+return s+pa(`M${cx},${y+mg} V${y+h}`)}}}
+const W=Math.max(B.w,FW)+110,h=B.h+132;
+return{w:W,h,d(cx,y){const xr=cx+W/2-16,xl=cx-W/2+16,bt=86,by=y+bt+B.h,bk=by+22;
+let s=dia(cx,y,n.t=="W"?"Not at gem?":"Repeats left?")+TT(cx+8,y+72,"YES");
+if(n.t=="P")s+=TT(cx-82,y+18,n.n+" times","end");
+if(B.n)s+=pa(`M${cx},${y+56} V${y+bt}`,1)+B.d(cx,y+bt)+pa(`M${cx},${by} V${bk} H${xl} V${y+28} H${cx-75}`,1);
+else s+=pa(`M${cx},${y+56} V${bk} H${xl} V${y+28} H${cx-75}`,1);
+return s+pa(`M${cx+75},${y+28} H${xr} V${y+h} H${cx}`)+TT(cx+82,y+22,"NO")}}}
+function fc(){const el=q("#rfc");if(el.hidden)return;
+if(!lines.length){el.innerHTML='<p class="mut" style="margin:6px">Add blocks to see your flowchart.</p>';return}
+const S=lseq(parse()),W=Math.max(S.w,FW)+60,cx=W/2;let y=64,s=bx(cx,8,"Start","start",100,30);
+if(S.n){s+=pa(`M${cx},38 V${y}`,1)+S.d(cx,y);y+=S.h}else y=38;
+s+=pa(`M${cx},${y} V${y+26}`,1)+bx(cx,y+26,"End","start",100,30);
+el.innerHTML=`<svg viewBox="0 0 ${W} ${y+70}" style="width:100%;max-width:${Math.round(Math.min(W*1.15,430))}px;display:block;margin:auto"><defs><marker id="fa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#8a85b8"/></marker></defs>${s}</svg>`}
+q("#rfb").onclick=()=>{const el=q("#rfc");el.hidden=!el.hidden;q("#rfb").textContent=el.hidden?"Show flowchart":"Hide flowchart";fc()};
 function hi(i){qa(".prl").forEach(el=>el.classList.toggle("run",+el.dataset.i==i))}
 q("#rrun").onclick=()=>{clearInterval(tm);if(!lines.length){msg("Add some blocks first.");return}
 const res=sim();ang=0;board();let k=0;const tr=res.loop?res.tr.slice(0,45):res.tr;msg("Running…");
